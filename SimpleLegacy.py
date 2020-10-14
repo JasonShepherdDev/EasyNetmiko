@@ -2,7 +2,7 @@ import csv
 import netmiko
 
 '''
-Below is a very basic script that is built to connect to cisco_ios devices.
+Below is a very basic script that is built to connect to cisco_ios devices via ssh and the cli.
 You will provide the list of networking devices in a .csv file that should follow the below format:
 
    ip, devicename, id
@@ -38,9 +38,9 @@ for row in csv_reader:
          connection = netmiko.ConnectHandler(ip= ip, device_type="cisco_ios",username=userName, password=passWord,timeout=30)
         
         
-         print(id, devicename,file=output)
+         print(id, devicename,file=output) #Adds the id and device name to our output file
          
-         #Below code is the actual execution of the command. We specify that it will the returned information to our output file
+         #Below code is the actual execution of the cli command. We specify that it will return the information to our output file
          print(connection.send_command(command),file=output)
          print(devicename + " completed")
          connection.disconnect() # Always good to disconnect :)
@@ -59,7 +59,7 @@ for row in csv_reader:
    except netmiko.ssh_exception.SSHException:
        print(id,'@ ssh exception', devicename,file=output)
        print("Was  unable to connect to" + devicename)
-       # example would be to try connect here with telnet rather than the default ssh
+       # example would be to try connect here with telnet rather than the default ssh should a SSHException be hit
        """connection = netmiko.ConnectHandler(ip= ip, device_type="cisco_ios_telnet",username="NetworkTruck", password="Truck123",timeout=30)
          time.sleep(2)
         """
